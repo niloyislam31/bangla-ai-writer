@@ -42,11 +42,11 @@ const sha=s=>crypto.createHash("sha256").update(s).digest("hex");
 const safeEqual=(a,b)=>{const A=Buffer.from(a),B=Buffer.from(b);return A.length===B.length&&crypto.timingSafeEqual(A,B)};
 const hashPassword=p=>new Promise((resolve,reject)=>{
  const salt=crypto.randomBytes(16);
- crypto.scrypt(p,salt,64,{N:32768,r:8,p:1},(e,d)=>e?reject(e):resolve(salt.toString("hex")+":"+d.toString("hex")));
+ crypto.scrypt(p,salt,64,{N:16384,r:8,p:1},(e,d)=>e?reject(e):resolve(salt.toString("hex")+":"+d.toString("hex")));
 });
 const verifyPassword=(p,stored)=>new Promise(resolve=>{
  const [salt,key]=stored.split(":");
- crypto.scrypt(p,Buffer.from(salt,"hex"),64,{N:32768,r:8,p:1},(e,d)=>resolve(!e&&safeEqual(d.toString("hex"),key)));
+ crypto.scrypt(p,Buffer.from(salt,"hex"),64,{N:16384,r:8,p:1},(e,d)=>resolve(!e&&safeEqual(d.toString("hex"),key)));
 });
 const premium=u=>!!u?.premium_until&&new Date(u.premium_until).getTime()>now();
 const limit=u=>premium(u)?Number(process.env.PREMIUM_DAILY_LIMIT||100):Number(process.env.FREE_DAILY_LIMIT||5);
