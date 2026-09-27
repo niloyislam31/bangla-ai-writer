@@ -173,6 +173,6 @@ app.post("/api/admin/payments/:id",auth,admin,(req,res)=>{
  res.json({ok:true});
 });
 
-app.get("*splat",(req,res)=>res.sendFile(path.join(__dirname,"public","index.html")));
+app.get("*splat",(req,res)=>res.sendFile(path.join(__dirname,"public","public","index.html")))
 await ensureAdmin();
 app.listen(port,"0.0.0.0",()=>console.log(`Bangla AI Writer listening on port ${port}`));
