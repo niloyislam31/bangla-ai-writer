@@ -85,6 +85,7 @@ function rate(req,res,next){
 }
 
 app.use(helmet({contentSecurityPolicy:false}));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json({limit:"100kb"}));
 app.use(cookieParser());
 app.get("/health",(req,res)=>res.json({ok:true,service:"bangla-ai-writer"}));
@@ -172,7 +173,6 @@ app.post("/api/admin/payments/:id",auth,admin,(req,res)=>{
  db.prepare("UPDATE payments SET status=?,reviewed_at=? WHERE id=?").run(action==="approve"?"approved":"rejected",new Date().toISOString(),p.id);
  res.json({ok:true});
 });
-
-app.get("*splat",(req,res)=>res.sendFile(path.join(__dirname,"public","index.html")))
+app.get("*splat",(req,res)=>res.sendFile(path.join(__dirname,"index.html")))
 await ensureAdmin();
 app.listen(port,"0.0.0.0",()=>console.log(`Bangla AI Writer listening on port ${port}`));
